@@ -45,18 +45,14 @@ class Email:
         date = headers.get("Date", "No Date")
 
         # Extract body (HTML preferred, fallback to plain text)
-        body = self.extract_email_body(self.email["payload"])
-
-        # Extract attachments (if any)
-        attachments = self.extract_attachments(self.email)
+        body = self.extract_email_body()
 
         return {
             "from": from_email,
             "to": to_email,
             "subject": subject,
             "date": date,
-            "body": body,
-            "attachments": attachments
+            "body": body
         }
 
     def extract_email_body(self):
