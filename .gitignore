@@ -10,3 +10,6 @@ token.json
 # Ignore Jupyter Notebook prototype files
 .ipynb_checkpoints/
 *.ipynb
+
+# Ignore json files
+*.json
