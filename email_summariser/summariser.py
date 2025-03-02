@@ -9,7 +9,7 @@ from gmail_reader import Email, list_messages, list_messages_in_thread
 from openai import OpenAI
 client = OpenAI()
 
-def summarise_email(service, email_id):
+def summarise_email_thread(service, email_id):
     """
     Read the email specified by its ID and summarise it by looking at the
     previous emails in the same thread.
@@ -43,6 +43,6 @@ if __name__ == "__main__":
     n = 0
     print(f"let's look at email {n} in the list with thread ID:", messages[n]["threadId"])
     email_id = messages[n]["id"]
-    res = summarise_email(service, email_id)
+    res = summarise_email_thread(service, email_id)
     print(res)
     
