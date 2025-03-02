@@ -1,0 +1,63 @@
+{
+    "calendar": [
+      {
+        "date": "2025-02-19",
+        "events": [
+          {"start_time": "09:00", "end_time": "10:30", "title": "Project Kickoff Meeting"},
+          {"start_time": "14:00", "end_time": "15:00", "title": "Client Call"}
+        ]
+      },
+      {
+        "date": "2025-02-20",
+        "events": [
+          {"start_time": "10:00", "end_time": "11:00", "title": "Marketing Strategy Session"},
+          {"start_time": "15:30", "end_time": "16:30", "title": "One-on-One with Manager"}
+        ]
+      },
+      {
+        "date": "2025-02-21",
+        "events": [
+          {"start_time": "08:30", "end_time": "09:30", "title": "Daily Standup"},
+          {"start_time": "13:00", "end_time": "14:00", "title": "Lunch with Team"},
+          {"start_time": "16:00", "end_time": "17:00", "title": "Code Review"}
+        ]
+      },
+      {
+        "date": "2025-02-22",
+        "events": [
+          {"start_time": "09:00", "end_time": "10:00", "title": "Team Meeting"},
+          {"start_time": "12:00", "end_time": "13:00", "title": "Lunch with Sarah"},
+          {"start_time": "15:00", "end_time": "16:00", "title": "Design Review"}
+        ]
+      },
+      {
+        "date": "2025-02-23",
+        "events": [
+          {"start_time": "11:00", "end_time": "12:00", "title": "Brunch with Friends"},
+          {"start_time": "15:00", "end_time": "16:00", "title": "Doctor's Appointment"}
+        ]
+      },
+      {
+        "date": "2025-02-24",
+        "events": [
+          {"start_time": "09:30", "end_time": "10:30", "title": "Finance Meeting"},
+          {"start_time": "13:30", "end_time": "14:30", "title": "Team Sync-up"},
+          {"start_time": "17:00", "end_time": "18:00", "title": "Gym Session"}
+        ]
+      },
+      {
+        "date": "2025-02-25",
+        "events": [
+          {"start_time": "10:00", "end_time": "11:00", "title": "Product Demo"},
+          {"start_time": "14:00", "end_time": "15:00", "title": "Workshop on AI"},
+          {"start_time": "16:30", "end_time": "17:30", "title": "Coffee Chat"}
+        ]
+      }
+    ],
+    "preferences": {
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "preferred_meeting_length": "60",
+      "breaks": ["12:00-13:00"]
+    }
+  }
+  
