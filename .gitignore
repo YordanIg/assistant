@@ -1,3 +1,9 @@
+.DS_Storeo
+
 __pycache__/
 venva/
+
+# Ignore Google OAuth credentials and tokens
+credentials.json
+token.json
 
