@@ -2,16 +2,22 @@ from gmail_auth import get_gmail_service
 import base64
 
 def list_messages(service):
-    """Fetch and display the latest emails"""
+    """
+    Fetch and display the latest emails, returning their IDs and thread IDs.
+    """
     # Ask the Gmail facility for a list of emails
     results = service.users().messages().list(userId='me', maxResults=10).execute()
     messages = results.get('messages', [])
-    for msg in messages:
-        print(f"Email ID: {msg['id']}")
-        if not messages:
-            print("No messages found.")
-            return
+    return messages
 
+def list_messages_in_thread(service, thread_id):
+    """
+    Fetch and display the emails in a thread, returning their IDs and thread IDs.
+    """
+    # Ask the Gmail facility for a list of emails in the thread
+    results = service.users().threads().get(userId='me', id=thread_id).execute()
+    messages = results.get('messages', [])
+    return messages
 
 def decode_base64(encoded_data):
     """Decodes base64 URL-safe encoded email content."""
