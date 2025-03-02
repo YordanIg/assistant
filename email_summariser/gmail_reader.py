@@ -1,9 +1,8 @@
 from gmail_auth import get_gmail_service
+import base64
 
-def list_messages():
+def list_messages(service):
     """Fetch and display the latest emails"""
-    service = get_gmail_service()  # Authenticate with OAuth
-
     # Ask the Gmail facility for a list of emails
     results = service.users().messages().list(userId='me', maxResults=10).execute()
     messages = results.get('messages', [])
@@ -12,7 +11,75 @@ def list_messages():
         if not messages:
             print("No messages found.")
             return
+
+
+def decode_base64(encoded_data):
+    """Decodes base64 URL-safe encoded email content."""
+    return base64.urlsafe_b64decode(encoded_data).decode("utf-8", errors="ignore")
+
+
+class Email:
+    """
+    Represents an email message and provides methods to extract its details
+    like headers, body, and attachments.
+    """
+    def __init__(self, email: dict):
+        self.email = email
+        self.id = email['id']
+        self.snippet = email['snippet']
+
+    def get_email_details(self):
+        """Extracts email headers, best body content, and attachments."""
+        
+        # Extract headers
+        headers = {h["name"]: h["value"] for h in self.email["payload"]["headers"]}
+        from_email = headers.get("From", "Unknown Sender")
+        to_email = headers.get("To", "Unknown Recipient")
+        subject = headers.get("Subject", "No Subject")
+        date = headers.get("Date", "No Date")
+
+        # Extract body (HTML preferred, fallback to plain text)
+        body = self.extract_email_body(self.email["payload"])
+
+        # Extract attachments (if any)
+        attachments = self.extract_attachments(self.email)
+
+        return {
+            "from": from_email,
+            "to": to_email,
+            "subject": subject,
+            "date": date,
+            "body": body,
+            "attachments": attachments
+        }
+
+    def extract_email_body(self):
+        """Finds the best email body: HTML (preferred) or plain text."""
+        payload = self.email['payload']
+        if "body" in payload and "data" in payload["body"]:
+            return decode_base64(payload["body"]["data"])  # Single-part email
+        
+        if "parts" in payload:
+            for part in payload["parts"]:
+                mime_type = part.get("mimeType", "")
+                if mime_type == "text/html":  # Prefer HTML
+                    return decode_base64(part["body"]["data"])
+                elif mime_type == "text/plain":  # Fallback to plain text
+                    plain_text = decode_base64(part["body"]["data"])
+        
+        return plain_text if 'plain_text' in locals() else "[No body found]"
     
 
 if __name__ == '__main__':
-    list_messages()
+    # Authenticate with OAuth
+    service = get_gmail_service()
+    print("List of last email IDs:")
+    messages = list_messages()
+    print(messages)
+
+    print("Example email:")
+    msg_id      = messages[0]['id']
+    email       = service.users().messages().get(userId='me', id=msg_id).execute()
+    email_obj   = Email(email)
+    print("ID:", email_obj.id)
+    print("details:\n", email_obj.get_email_details(email))
