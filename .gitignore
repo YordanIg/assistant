@@ -7,3 +7,6 @@ venva/
 credentials.json
 token.json
 
+# Ignore Jupyter Notebook prototype files
+.ipynb_checkpoints/
+*.ipynb
