@@ -25,14 +25,10 @@ def summarise_email(service, email_id):
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful assistant."
+                "content": "You are a helpful assistant. Summarise the following email thread."
             },
             {
                 "role": "user",
-                "content": "Summarise the email thread."
-            },
-            {
-                "role": "system",
                 "content": "\n".join(email_bodies)
             }
         ]
