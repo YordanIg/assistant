@@ -97,6 +97,13 @@ class ListOfEmails:
     def __init__(self, *emails: Email):
         self.emails = emails
 
+    def get_email_details(self, service):
+        return [email.get_email_details(service) for email in self.emails]
+    
+    def get_email_bodies(self, service):
+        return [email.extract_email_body(service) for email in self.emails]
+    
+
 if __name__ == '__main__':
     # Authenticate with OAuth
     service = get_gmail_service()
