@@ -1,12 +1,12 @@
 from gmail_auth import get_gmail_service
 import base64
 
-def list_messages(service):
+def list_messages(service, n=10):
     """
-    Fetch and display the latest emails, returning their IDs and thread IDs.
+    Fetch and display the latest n emails, returning their IDs and thread IDs.
     """
     # Ask the Gmail facility for a list of emails
-    results = service.users().messages().list(userId='me', maxResults=10).execute()
+    results = service.users().messages().list(userId='me', maxResults=n).execute()
     messages = results.get('messages', [])
     return messages
 
@@ -102,7 +102,31 @@ class ListOfEmails:
     
     def get_email_bodies(self, service):
         return [email.extract_email_body(service) for email in self.emails]
-    
+
+
+def fetch_latest_emails(service, n=10):
+    """
+    Fetches the latest n emails from the user's inbox, returning them as a 
+    ListOfEmails object.
+    """
+    messages = list_messages(service, n)
+    emails = [Email(message) for message in messages]
+    return ListOfEmails(*emails)
+
+def fetch_emails_inthread(service, id=None, thread_id=None):
+    """
+    Fetches the emails in a thread given either the ID of a single email in the
+    thread or the threadID, returning them as a ListOfEmails object.
+    """
+    if id is not None:
+        if thread_id is not None:
+            raise ValueError("Provide only one of id or threadID.")
+        thread_id = service.users().messages().get(userId='me', id=id
+        ).execute()['threadId']
+    messages = list_messages_in_thread(service, thread_id)
+    emails = [Email(message) for message in messages]
+    return ListOfEmails(*emails)
+
 
 if __name__ == '__main__':
     # Authenticate with OAuth
