@@ -30,13 +30,32 @@ class Email:
     like headers, body, and attachments.
     """
     def __init__(self, email: dict):
-        self.email = email
-        self.id = email['id']
-        self.snippet = email['snippet']
+        """
+        Args:
+            email (dict): 
+            A dictionary representing either the entire email 
+            or just the ID and threadID of the email.
+        """
+        self.id       = email['id']
+        self.threadId = email['threadId']
+        if len(email) > 2:
+            self.full_email = email
+        else:
+            self.full_email = None
+    
+    def _fetch_email(self, service):
+        """
+        Fetches the full email message if not already fetched.
+        """
+        self.full_email = service.users().messages().get(userId='me', id=self.id).execute()
 
-    def get_email_details(self):
-        """Extracts email headers, best body content, and attachments."""
-        
+    def get_email_details(self, service=None):
+        """
+        Extracts email headers, best body content, and attachments.
+        """
+        if self.full_email is None:
+            self._fetch_email(service)
+
         # Extract headers
         headers = {h["name"]: h["value"] for h in self.email["payload"]["headers"]}
         from_email = headers.get("From", "Unknown Sender")
@@ -55,8 +74,11 @@ class Email:
             "body": body
         }
 
-    def extract_email_body(self):
+    def extract_email_body(self, service=None):
         """Finds the best email body: HTML (preferred) or plain text."""
+        if self.full_email is None:
+            self._fetch_email(service)
+        
         payload = self.email['payload']
         if "body" in payload and "data" in payload["body"]:
             return decode_base64(payload["body"]["data"])  # Single-part email
