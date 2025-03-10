@@ -70,7 +70,10 @@ class Email:
                     plain_text = decode_base64(part["body"]["data"])
         
         return plain_text if 'plain_text' in locals() else "[No body found]"
-    
+
+class ListOfEmails:
+    def __init__(self, *emails: Email):
+        self.emails = emails
 
 if __name__ == '__main__':
     # Authenticate with OAuth
