@@ -43,7 +43,17 @@ def summarise_list_of_emails(service, email_list):
     email_bodies  = [email["body"] for email in email_details]
 
     # Generate a summary of the email thread
-    sys_instructions = "You are a helpful assistant. Summarise the following email thread."
+    sys_instructions = """
+    You are a helpful assistant to the user. Read the following emails and
+    provide a brief summary, focusing primarily on action items, but also on
+    what the main points, things to do, 
+    consider or remember are. You must structure your response as a brief 
+    paragraph for each urgent action item, followed by a paragraph summarising
+    other offers or requests.
+    Pay particular attention to emails that are clearly not part of an email
+    subscription, as these are sent to the user personally and are likely to
+    require a response.
+    """
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -57,12 +67,12 @@ def summarise_list_of_emails(service, email_list):
             }
         ]
     )
-    print(completion.choices[0].message)
+    print(completion.choices[0].message.content)
 
 if __name__ == "__main__":
     # Authenticate with OAuth
     service = get_gmail_service()
     
-    # Fetch and summarise the latest 5 emails.
-    latest_emails = gr.fetch_latest_emails(service, n=5)
+    # Fetch and summarise the latest 7 emails.
+    latest_emails = gr.fetch_latest_emails(service, n=7)
     summarise_list_of_emails(service, latest_emails)
