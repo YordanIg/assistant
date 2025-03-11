@@ -57,7 +57,7 @@ class Email:
             self._fetch_email(service)
 
         # Extract headers
-        headers = {h["name"]: h["value"] for h in self.email["payload"]["headers"]}
+        headers = {h["name"]: h["value"] for h in self.full_email["payload"]["headers"]}
         from_email = headers.get("From", "Unknown Sender")
         to_email = headers.get("To", "Unknown Recipient")
         subject = headers.get("Subject", "No Subject")
@@ -79,7 +79,7 @@ class Email:
         if self.full_email is None:
             self._fetch_email(service)
         
-        payload = self.email['payload']
+        payload = self.full_email['payload']
         if "body" in payload and "data" in payload["body"]:
             return _decode_base64(payload["body"]["data"])  # Single-part email
         
