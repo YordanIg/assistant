@@ -19,7 +19,7 @@ def list_messages_in_thread(service, thread_id):
     messages = results.get('messages', [])
     return messages
 
-def decode_base64(encoded_data):
+def _decode_base64(encoded_data):
     """Decodes base64 URL-safe encoded email content."""
     return base64.urlsafe_b64decode(encoded_data).decode("utf-8", errors="ignore")
 
@@ -81,15 +81,15 @@ class Email:
         
         payload = self.email['payload']
         if "body" in payload and "data" in payload["body"]:
-            return decode_base64(payload["body"]["data"])  # Single-part email
+            return _decode_base64(payload["body"]["data"])  # Single-part email
         
         if "parts" in payload:
             for part in payload["parts"]:
                 mime_type = part.get("mimeType", "")
                 if mime_type == "text/html":  # Prefer HTML
-                    return decode_base64(part["body"]["data"])
+                    return _decode_base64(part["body"]["data"])
                 elif mime_type == "text/plain":  # Fallback to plain text
-                    plain_text = decode_base64(part["body"]["data"])
+                    plain_text = _decode_base64(part["body"]["data"])
         
         return plain_text if 'plain_text' in locals() else "[No body found]"
 
