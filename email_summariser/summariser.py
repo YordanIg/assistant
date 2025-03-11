@@ -16,7 +16,7 @@ def summarise_email_thread(service, email_id):
     """
     messages = gr.list_messages_in_thread(service, email_id)
     emails = [gr.Email(message) for message in messages]
-    email_details = [email.get_email_details() for email in emails]
+    email_details = [email.get_email_details(service) for email in emails]
     email_bodies = [email["body"] for email in email_details]
 
     # Generate a summary of the email thread
