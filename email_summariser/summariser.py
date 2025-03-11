@@ -35,6 +35,30 @@ def summarise_email_thread(service, email_id):
     )
     print(completion.choices[0].message)
 
+def summarise_list_of_emails(service, email_list):
+    """
+    Summarise a list of emails object.
+    """
+    email_details = email_list.get_email_details(service)
+    email_bodies  = [email["body"] for email in email_details]
+
+    # Generate a summary of the email thread
+    sys_instructions = "You are a helpful assistant. Summarise the following email thread."
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": sys_instructions
+            },
+            {
+                "role": "user",
+                "content": "\n".join(email_bodies)
+            }
+        ]
+    )
+    print(completion.choices[0].message)
+
 if __name__ == "__main__":
     # Authenticate with OAuth
     service = get_gmail_service()
