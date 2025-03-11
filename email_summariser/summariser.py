@@ -62,11 +62,7 @@ def summarise_list_of_emails(service, email_list):
 if __name__ == "__main__":
     # Authenticate with OAuth
     service = get_gmail_service()
-    print("List of last email IDs:")
-    messages = gr.list_messages(service)
-    n = 0
-    print(f"let's look at email {n} in the list with thread ID:", messages[n]["threadId"])
-    email_id = messages[n]["id"]
-    res = summarise_email_thread(service, email_id)
-    print(res)
     
+    # Fetch and summarise the latest 5 emails.
+    latest_emails = gr.fetch_latest_emails(service, n=5)
+    summarise_list_of_emails(service, latest_emails)
